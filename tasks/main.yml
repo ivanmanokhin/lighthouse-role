@@ -1,0 +1,21 @@
+---
+- name: LightHouse Block
+  block:
+    - name: Git clone LightHouse
+      ansible.builtin.git:
+        repo: https://github.com/VKCOM/lighthouse
+        dest: "{{ lighthouse_dir }}"
+        single_branch: true
+        version: "{{ lighthouse_branch }}"
+    - name: Set SELinux Type
+      community.general.sefcontext:
+        target: "{{ lighthouse_dir }}"
+        state: present
+        setype: httpd_sys_content_t
+    - name: Generate Nginx (Lighthouse) Config
+      ansible.builtin.template:
+        src: lighthouse.j2
+        dest: /etc/nginx/conf.d/lighthouse.conf
+        mode: "0644"
+      notify: Restart Nginx server
+become: true
