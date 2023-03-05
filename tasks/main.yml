@@ -18,4 +18,4 @@
         dest: /etc/nginx/conf.d/lighthouse.conf
         mode: "0644"
       notify: Restart Nginx server
-become: true
+  become: true
